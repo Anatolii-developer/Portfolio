@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="mediaqueries.css" />
   </head>
   <body>
+    <div id="loader">
+  <div class="spinner"></div>
+</div>
+
     <nav id="desktop-nav">
       <div class="logo">Anatolii Hryhorzhevskyi</div>
       <div>
@@ -38,7 +42,7 @@
     </nav>
     <section id="profile">
       <div class="section__pic-container">
-        <img src="./assets/portfolio-photo.png" alt="John Doe profile picture" />
+        <img src="./assets/avatar.JPG" alt="John Doe profile picture" />
       </div>
       <div class="section__text">
         <p class="section__text__p1">Hello, I'm</p>
@@ -77,7 +81,7 @@
       <div class="section-container">
         <div class="section__pic-container">
           <img
-            src="./assets/portfolio-photo2.png"
+            src="./assets/photo.JPG"
             alt="Profile picture"
             class="about-pic"
           />
@@ -278,16 +282,16 @@
           <div class="details-container color-container">
             <div class="article-container">
               <img
-                src="./assets/project2.png"
+                src="./assets/inst.png"
                 alt="Project 2"
                 class="project-img"
               />
             </div>
-            <h2 class="experience-sub-title project-title">Style in Georgia</h2>
+            <h2 class="experience-sub-title project-title">Psychological Institute Platform</h2>
             <div class="btn-container">
               <button
                 class="btn btn-color-2 project-btn"
-                onclick="location.href='https://styleingeorgia.com/'"
+                onclick="location.href='http://157.230.121.24:5050'"
               >
                 Live Demo
               </button>
@@ -305,9 +309,99 @@
             <div class="btn-container">
               <button
                 class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/Anatolii-developer/Wengy_landing'"
+                onclick="location.href='https://wengy.co'"
               >
-                Github
+                Live Demo
+              </button>
+            </div>
+          </div>
+          <div class="details-container color-container">
+            <div class="article-container">
+              <img
+                src="./assets/vsl.png"
+                alt="Project 3"
+                class="project-img"
+              />
+            </div>
+            <h2 class="experience-sub-title project-title">VSL Website</h2>
+            <div class="btn-container">
+              <button
+                class="btn btn-color-2 project-btn"
+                onclick="location.href='https://intensive.wengy.co'"
+              >
+                Live Demo
+              </button>
+            </div>
+          </div>
+          <div class="details-container color-container">
+            <div class="article-container">
+              <img
+                src="./assets/ateam.png"
+                alt="Project 3"
+                class="project-img"
+              />
+            </div>
+            <h2 class="experience-sub-title project-title">ATeam Marketing Website</h2>
+            <div class="btn-container">
+              <button
+                class="btn btn-color-2 project-btn"
+                onclick="location.href='https://ateamgroup.wengy.co'"
+              >
+                Live Demo
+              </button>
+            </div>
+          </div>
+          <div class="details-container color-container">
+            <div class="article-container">
+              <img
+                src="./assets/graphitti.png"
+                alt="Project 3"
+                class="project-img"
+              />
+            </div>
+            <h2 class="experience-sub-title project-title">Graffiti Gone Website</h2>
+            <div class="btn-container">
+              <button
+                class="btn btn-color-2 project-btn"
+                onclick="location.href='https://graffiti-gone.wengy.co/'"
+              >
+                Live Demo
+              </button>
+            </div>
+          </div>
+          <div class="details-container color-container">
+            <div class="article-container">
+              <img
+                src="./assets/wengy-mark.png"
+                alt="Project 3"
+                class="project-img"
+              />
+            </div>
+            <h2 class="experience-sub-title project-title">Wengy Marketing Website</h2>
+            <div class="btn-container">
+              <button
+                class="btn btn-color-2 project-btn"
+                onclick="location.href='https://marketing.wengy.co/'"
+              >
+                Live Demo
+              </button>
+            </div>
+          </div>
+          <div class="details-container color-container">
+            <div class="article-container">
+              <img
+                src="./assets/beauty.png"
+                alt="Project 3"
+                class="project-img"
+              />
+            </div>
+            <h2 class="experience-sub-title project-title">Beauty Salon Website</h2>
+            <div class="btn-container">
+              <button
+                class="btn btn-color-2 project-btn"
+                onclick="location.href='https://lpbeatymedical.wengy.co/'"
+              >
+                Live Demo
               </button>
             </div>
           </div>
@@ -356,5 +450,17 @@
       <p>Copyright &#169; 2025 Anatolii Hryhorzhevskyi. All Rights Reserved.</p>
     </footer>
     <script src="script.js"></script>
+    <script>
+  window.addEventListener("load", function () {
+    const loader = document.getElementById("loader");
+    loader.style.transition = "opacity 3s ease";
+    loader.style.opacity = "0";
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 600); 
+  });
+</script>
+
+
   </body>
 </html>
