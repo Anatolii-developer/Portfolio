@@ -4,463 +4,481 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anatolii Hryhorzhevskyi Portfolio</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="mediaqueries.css" />
+    <title>Anatolii Hryhorzhevskyi – Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+      /* ------------------------------
+         THEME & TOKENS
+      --------------------------------*/
+      :root{
+        
+        --bg:#0b0f14;                 
+        --fg: #e9eef6;                
+        --muted:#a8b3c7;             
+        --glass:#0b0f14a6;            
+        --stroke:rgba(255,255,255,.12);
+        --shadow:0 8px 30px rgba(0,0,0,.35);
+
+      
+        --g1:#6ea8ff;  
+        --g2:#a47aff;  
+        --g3:#4ff2d1;  
+
+        
+        --r-2xl:24px;
+        --r-xl:18px;
+        --blur:20px;
+
+        
+        --content-max:1180px;
+        --section-pad:80px;
+      }
+
+      @media (max-width:1200px){
+        :root{ --section-pad:64px; }
+      }
+      @media (max-width:720px){
+        :root{ --section-pad:56px; }
+      }
+
+     
+      *,*::before,*::after{ box-sizing:border-box }
+      html,body{ height:100% }
+      body{ margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif; color:var(--fg); background:var(--bg); overflow-x:hidden }
+      a{ color:inherit; text-decoration:none }
+      img{ display:block; max-width:100% }
+      h1,h2,h3{ margin:0 0 .6rem }
+      p{ margin:0 0 1rem; color:var(--muted) }
+
+      /* ------------------------------
+         BACKGROUND ORBS (animated)
+      --------------------------------*/
+      .scene{
+        position:fixed; inset:0; overflow:hidden; z-index:-1;
+        background: radial-gradient(1200px 1200px at -10% -10%, rgba(110,168,255,.18), transparent 60%),
+                    radial-gradient(1200px 1200px at 110% 10%, rgba(164,122,255,.16), transparent 60%),
+                    radial-gradient(1200px 1200px at 50% 110%, rgba(79,242,209,.13), transparent 60%),
+                    linear-gradient(180deg, #0b0f14 0%, #0a0c12 100%);
+      }
+      .orb{ position:absolute; filter: blur(60px); opacity:.8; mix-blend-mode:screen }
+      .orb.one{ width:480px;height:480px; background:radial-gradient(circle at 30% 30%, var(--g1), transparent 60%); left:-160px; top:-120px; animation:drift1 14s ease-in-out infinite alternate }
+      .orb.two{ width:560px;height:560px; background:radial-gradient(circle at 70% 50%, var(--g2), transparent 60%); right:-200px; top:10vh; animation:drift2 16s ease-in-out infinite alternate }
+      .orb.three{ width:520px;height:520px; background:radial-gradient(circle at 40% 60%, var(--g3), transparent 60%); left:10vw; bottom:-180px; animation:drift3 18s ease-in-out infinite alternate }
+      @keyframes drift1{ to{ transform:translate(60px, 80px) } }
+      @keyframes drift2{ to{ transform:translate(-80px, 40px) } }
+      @keyframes drift3{ to{ transform:translate(120px, -60px) } }
+
+      /* ------------------------------
+         LIQUID GLASS LOADER (fullscreen)
+      --------------------------------*/
+      #loader{
+        position:fixed; inset:0; display:grid; place-items:center; background:rgba(8,11,16,.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); z-index:9999; transition:opacity .6s ease;
+      }
+      .gooey{
+        width:120px; height:120px; position:relative; filter:url(#gooey);
+      }
+      .drop{
+        position:absolute; inset:0; border-radius:50%;
+        background:conic-gradient(from 0deg, var(--g1), var(--g2), var(--g3), var(--g1));
+        animation:spin 2.2s linear infinite;
+      }
+      .bubble{
+        position:absolute; width:42px; height:42px; border-radius:50%; background:linear-gradient(135deg, #fff6, #fff2);
+        top:50%; left:50%; transform:translate(-50%,-50%);
+        animation:float 1.8s ease-in-out infinite alternate;
+      }
+      @keyframes spin{ to{ transform:rotate(360deg) } }
+      @keyframes float{ to{ transform:translate(-50%,-30%) scale(1.15) } }
+      .loader-label{ margin-top:18px; font-weight:600; letter-spacing:.08em; color:var(--muted) }
+
+      /* ------------------------------
+         NAVBAR (glass)
+      --------------------------------*/
+      .nav{
+        position:sticky; top:0; z-index:50; padding:14px 18px; display:flex; justify-content:center;
+        background:linear-gradient(to bottom, rgba(11,15,20,.65), rgba(11,15,20,.35));
+        backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+        border-bottom:1px solid var(--stroke);
+      }
+      .nav-inner{ width:min(100%, var(--content-max)); display:flex; align-items:center; justify-content:space-between; gap:12px }
+      .brand{ display:flex; align-items:center; gap:12px; font-weight:700; letter-spacing:.02em }
+      .brand-badge{ width:34px;height:34px;border-radius:12px; background:linear-gradient(135deg, var(--g1), var(--g2)); box-shadow:var(--shadow) }
+
+      .links{ display:flex; gap:18px; align-items:center }
+      .links a{ padding:10px 14px; border-radius:12px; border:1px solid transparent; color:var(--muted); font-weight:500 }
+      .links a:hover{ color:var(--fg); border-color:var(--stroke); background:rgba(255,255,255,.03) }
+
+      .hamburger{ display:none; width:40px;height:40px; border-radius:12px; border:1px solid var(--stroke); background:rgba(255,255,255,.03); place-items:center; cursor:pointer }
+      .menu{ display:none; position:absolute; top:62px; right:18px; background:var(--glass); border:1px solid var(--stroke); border-radius:16px; backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur)); box-shadow:var(--shadow) }
+      .menu a{ display:block; padding:12px 16px; }
+
+      @media (max-width:980px){ .links{ display:none } .hamburger{ display:grid } }
+
+      /* ------------------------------
+         GENERIC GLASS CARD
+      --------------------------------*/
+      .glass{
+        background:var(--glass);
+        border:1px solid var(--stroke);
+        border-radius:var(--r-2xl);
+        backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+        box-shadow: var(--shadow);
+      }
+
+      /* ------------------------------
+         SECTIONS
+      --------------------------------*/
+      section{ padding: var(--section-pad) 20px }
+      .wrap{ width:min(100%, var(--content-max)); margin-inline:auto }
+      .title{ font-size: clamp(28px, 4vw, 48px); line-height:1.1; letter-spacing:.01em }
+      .subtitle{ color:var(--muted); font-weight:500; margin-top:.4rem }
+
+      /* ------------------------------
+         HERO
+      --------------------------------*/
+      .hero{ display:grid; grid-template-columns: 1.25fr .9fr; align-items:center; gap:36px }
+      .hero-left .cta{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px }
+      .pill{ display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:999px; border:1px solid var(--stroke); background:rgba(255,255,255,.03); color:var(--muted); font-weight:600 }
+      .pill img{ width:18px; height:18px }
+
+      .btn{ position:relative; display:inline-block; padding:14px 18px; border-radius:14px; font-weight:600; border:1px solid transparent; cursor:pointer }
+      .btn.primary{ background:linear-gradient(135deg, var(--g1), var(--g2)); color:#0a0c12 }
+      .btn.ghost{ color:var(--fg); border-color:var(--stroke); background:rgba(255,255,255,.02) }
+      .btn.ghost:hover{ background:rgba(255,255,255,.05) }
+
+      .avatar{
+        position:relative; width:min(100%, 360px); margin-left:auto; aspect-ratio:3/4; overflow:hidden; border-radius:24px; border:1px solid var(--stroke);
+      }
+      .avatar img{ width:100%; height:100%; object-fit:cover }
+      .avatar::before{ content:""; position:absolute; inset:-20%; background:conic-gradient(from 0deg, #ffffff0d, #ffffff00 40%, #ffffff0d 70%); animation: sweep 6s linear infinite }
+      @keyframes sweep{ to{ transform:rotate(360deg) } }
+
+      .socials{ display:flex; gap:10px; margin-top:18px }
+      .ico{ width:36px; height:36px; border-radius:10px; display:grid; place-items:center; border:1px solid var(--stroke); background:rgba(255,255,255,.03) }
+      .ico img{ width:20px; height:20px }
+
+      @media (max-width:980px){ .hero{ grid-template-columns: 1fr; } .avatar{ margin-inline:auto } }
+
+      /* ------------------------------
+         ABOUT
+      --------------------------------*/
+      .about-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:24px; align-items:start }
+      @media (max-width:980px){ .about-grid{ grid-template-columns:1fr } }
+
+      /* ------------------------------
+         EXPERIENCE (cards grid)
+      --------------------------------*/
+      .cards{ display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:18px }
+      @media (max-width:840px){ .cards{ grid-template-columns:1fr } }
+      .card{ padding:22px; }
+      .card h3{ font-size:20px; margin-bottom:6px }
+      .skill{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; border:1px solid var(--stroke); background:rgba(255,255,255,.02); margin:8px 0; }
+      .skill img{ width:18px; height:18px }
+
+      /* ------------------------------
+         PROJECTS
+      --------------------------------*/
+      .projects{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:18px }
+      @media (max-width:1080px){ .projects{ grid-template-columns: repeat(2, minmax(0,1fr)) } }
+      @media (max-width:720px){ .projects{ grid-template-columns: 1fr } }
+      .proj{ overflow:hidden; }
+      .thumb{ aspect-ratio: 3/2; border-bottom:1px solid var(--stroke); overflow:hidden }
+      .thumb img{ width:100%; height:100%; object-fit:cover; transform:scale(1.02); transition: transform .5s ease }
+      .proj:hover .thumb img{ transform:scale(1.06) }
+      .proj .pad{ padding:16px }
+      .proj h4{ margin:0 0 8px }
+      .proj .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px }
+
+      /* ------------------------------
+         CONTACT & FOOTER
+      --------------------------------*/
+      .contact-row{ display:flex; flex-wrap:wrap; gap:12px }
+      .contact-item{ display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:14px; border:1px solid var(--stroke); background:rgba(255,255,255,.02) }
+      footer{ padding:36px 20px; color:var(--muted); border-top:1px solid var(--stroke); background:rgba(255,255,255,.02) }
+
+      /* ------------------------------
+         REVEAL ON SCROLL
+      --------------------------------*/
+      .reveal{ opacity:0; transform: translateY(14px); transition: all .7s ease }
+      .reveal.show{ opacity:1; transform:none }
+    </style>
   </head>
   <body>
-    <div id="loader">
-  <div class="spinner"></div>
-</div>
+    
+    <div class="scene">
+      <div class="orb one"></div>
+      <div class="orb two"></div>
+      <div class="orb three"></div>
+    </div>
 
-    <nav id="desktop-nav">
-      <div class="logo">Anatolii Hryhorzhevskyi</div>
+   
+    <div id="loader" aria-label="Loading">
       <div>
-        <ul class="nav-links">
-          <li><a href="#about">About</a></li>
-          <li><a href="#experience">Experience</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
+        <div class="gooey">
+          <div class="drop"></div>
+          <div class="bubble"></div>
+          <svg width="0" height="0">
+            <defs>
+              <filter id="gooey">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -10" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+              </filter>
+            </defs>
+          </svg>
+        </div>
+        <div class="loader-label">Launching portfolio…</div>
+      </div>
+    </div>
+
+    <!-- NAV -->
+    <nav class="nav glass">
+      <div class="nav-inner">
+        <a class="brand" href="#top" aria-label="Home">
+          <span class="brand-badge"></span>
+          <span>Anatolii Hryhorzhevskyi</span>
+        </a>
+        <div class="links">
+          <a href="#about">About</a>
+          <a href="#experience">Experience</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <button class="hamburger" aria-label="Open menu" aria-haspopup="true" aria-expanded="false">☰</button>
+        <div class="menu glass" role="menu" aria-hidden="true">
+          <a role="menuitem" href="#about">About</a>
+          <a role="menuitem" href="#experience">Experience</a>
+          <a role="menuitem" href="#projects">Projects</a>
+          <a role="menuitem" href="#contact">Contact</a>
+        </div>
       </div>
     </nav>
-    <nav id="hamburger-nav">
-      <div class="logo">Anatolii Hryhorzhevskyi</div>
-      <div class="hamburger-menu">
-        <div class="hamburger-icon" onclick="toggleMenu()">
-          <span></span>
-          <span></span>
-          <span></span>
+
+    <!-- HERO -->
+    <section id="top" class="wrap">
+      <div class="hero">
+        <div class="hero-left">
+          <div class="pill glass" style="width:max-content;margin-bottom:10px">Hello, I'm <strong>&nbsp;Anatolii</strong></div>
+          <h1 class="title">Full‑Stack Developer</h1>
+          <p class="subtitle">I build performant, elegant experiences across front‑end, back‑end, and cloud. Focused on clean UX, solid architecture, and results.</p>
+          <div class="cta">
+            <a class="btn primary" href="./assets/Anatolii_HryhorzhevskyiCV.pdf" target="_blank" rel="noopener">Download CV</a>
+            <a class="btn ghost" href="#contact">Contact Info</a>
+          </div>
+          <div class="socials">
+            <a class="ico" href="https://www.linkedin.com/in/anatolii-hryhorzhevskyi/" target="_blank" rel="noopener" aria-label="LinkedIn">
+              <img src="./assets/linkedin.png" alt="LinkedIn" />
+            </a>
+            <a class="ico" href="https://github.com/Anatolii-developer" target="_blank" rel="noopener" aria-label="GitHub">
+              <img src="./assets/github.png" alt="GitHub" />
+            </a>
+          </div>
         </div>
-        <div class="menu-links">
-          <li><a href="#about" onclick="toggleMenu()">About</a></li>
-          <li><a href="#experience" onclick="toggleMenu()">Experience</a></li>
-          <li><a href="#projects" onclick="toggleMenu()">Projects</a></li>
-          <li><a href="#contact" onclick="toggleMenu()">Contact</a></li>
-        </div>
-      </div>
-    </nav>
-    <section id="profile">
-      <div class="section__pic-container">
-        <img src="./assets/avatar.JPG" alt="John Doe profile picture" />
-      </div>
-      <div class="section__text">
-        <p class="section__text__p1">Hello, I'm</p>
-        <h1 class="title">Anatolii Hryhorzhevskyi</h1>
-        <p class="section__text__p2">Full Stack Developer</p>
-        <div class="btn-container">
-          <button
-            class="btn btn-color-2"
-            onclick="window.open('./assets/Anatolii_HryhorzhevskyiCV.pdf')"
-          >
-            Download CV
-          </button>
-          <button class="btn btn-color-1" onclick="location.href='./#contact'">
-            Contact Info
-          </button>
-        </div>
-        <div id="socials-container">
-          <img
-            src="./assets/linkedin.png"
-            alt="My LinkedIn profile"
-            class="icon"
-            onclick="location.href='https://www.linkedin.com/in/anatolii-hryhorzhevskyi/'"
-          />
-          <img
-            src="./assets/github.png"
-            alt="My Github profile"
-            class="icon"
-            onclick="location.href='https://github.com/Anatolii-developer'"
-          />
+        <div class="avatar glass">
+          <img src="./assets/avatar.JPG" alt="Anatolii portrait" />
         </div>
       </div>
     </section>
+
+    <!-- ABOUT -->
     <section id="about">
-      <p class="section__text__p1">Get To Know More</p>
-      <h1 class="title">About Me</h1>
-      <div class="section-container">
-        <div class="section__pic-container">
-          <img
-            src="./assets/photo.JPG"
-            alt="Profile picture"
-            class="about-pic"
-          />
+      <div class="wrap about-grid">
+        <div class="glass card">
+          <h2 class="title" style="font-size:28px">About Me</h2>
+          <p style="margin-top:8px">I have 3+ years of experience as a <strong>Full‑Stack Developer</strong>. I ship scalable products end‑to‑end — modern front‑end, robust APIs, data, and cloud — with an eye for UX, performance, and maintainability.</p>
         </div>
-        <div class="about-details-container">
-          <div class="about-containers">
-            <div class="details-container">
-              <img
-                src="./assets/experience.png"
-                alt="Experience icon"
-                class="icon"
-              />
-              <h3>Experience</h3>
-              <p>3+ years <br />Full Stack Development</p>
-            </div>
-            <div class="details-container">
-              <img
-                src="./assets/education.png"
-                alt="Education icon"
-                class="icon"
-              />
-              <h3>Education</h3>
-              <p>Advanced Diploma<br />Computer Programming and Analysis <br /> Seneca Polytechnic</p>
-            </div>
-          </div>
-          <div class="text-container">
-            <p>
-              I have over three years of experience as a <span class="highlight">Full Stack Developer</span>. Building scalable and high-performing digital solutions is made possible by my skills in database administration, cloud infrastructure, and front-end and back-end development.
-              I concentrate on developing smooth user experiences, increasing application efficiency, and optimizing development processes because I have a solid understanding of modern web technologies.  I enjoy dealing with difficult problems and producing results, whether it's developing responsive user interfaces, streamlining databases, or putting cloud solutions into place.
-            </p>
-          </div>
+        <div class="glass card">
+          <h3>Highlights</h3>
+          <div class="skill"><img src="./assets/experience.png" alt="exp"/> <span>3+ years in Full‑Stack Development</span></div>
+          <div class="skill"><img src="./assets/education.png" alt="edu"/> <span>Advanced Diploma — Computer Programming & Analysis (Seneca Polytechnic)</span></div>
         </div>
       </div>
-      <img
-        src="./assets/arrow.png"
-        alt="Arrow icon"
-        class="icon arrow"
-        onclick="location.href='./#experience'"
-      />
     </section>
+
+    <!-- EXPERIENCE -->
     <section id="experience">
-      <p class="section__text__p1">Explore My</p>
-      <h1 class="title">Experience</h1>
-      <div class="experience-grid">
-        <div class="experience-card">
-          <h2 class="experience-sub-title">Frontend Development</h2>
-          <div class="article-container">
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>HTML & CSS</h3>
-                <p>Experienced</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>JavaScript</h3>
-                <p>Experienced</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>TypeScript</h3>
-                <p>Intermediate</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>React</h3>
-                <p>Experienced</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>Vue.js</h3>
-                <p>Intermediate</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>Tailwind CSS & Bootstrap</h3>
-                <p>Intermediate</p>
-              </div>
-            </article>
+      <div class="wrap">
+        <h2 class="title">Experience</h2>
+        <p class="subtitle">Selected skills & stacks</p>
+        <div class="cards">
+          <div class="glass card">
+            <h3>Frontend</h3>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> HTML, CSS</div>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> JavaScript</div>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> TypeScript</div>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> React</div>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> Vue.js</div>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> Tailwind CSS / Bootstrap</div>
           </div>
-        </div>
-        <div class="experience-card">
-          <h2 class="experience-sub-title">Backend Development</h2>
-          <div class="article-container">
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>Node.js & Express.js</h3>
-                <p>Intermediate</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>Python & Flask</h3>
-                <p>Intermediate</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>ASP.NET</h3>
-                <p>Basic</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>PostgreSQL & MySQL</h3>
-                <p>Intermediate</p>
-              </div>
-            </article>
+          <div class="glass card">
+            <h3>Backend</h3>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> Node.js / Express</div>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> Python / Flask</div>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> ASP.NET (basic)</div>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> PostgreSQL / MySQL</div>
           </div>
-        </div>
-        <div class="experience-card">
-          <h2 class="experience-sub-title">Mobile Development</h2>
-          <div class="article-container">
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>Kotlin (Android SDK)</h3>
-                <p>Intermediate</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>Swift (iOS SDK)</h3>
-                <p>Basic</p>
-              </div>
-            </article>
+          <div class="glass card">
+            <h3>Mobile</h3>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> Kotlin (Android SDK)</div>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> Swift (iOS SDK)</div>
           </div>
-        </div>
-        <div class="experience-card">
-          <h2 class="experience-sub-title">Cloud & DevOps</h2>
-          <div class="article-container">
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>AWS</h3>
-                <p>Basic</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>Azure Cloud</h3>
-                <p>Basic</p>
-              </div>
-            </article>
-            <article>
-              <img src="./assets/checkmark.png" alt="Experience icon" class="icon" />
-              <div>
-                <h3>Framer Motion</h3>
-                <p>Intermediate</p>
-              </div>
-            </article>
+          <div class="glass card">
+            <h3>Cloud & DevOps</h3>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> AWS / Azure (basic)</div>
+            <div class="skill"><img src="./assets/checkmark.png" alt=""/> CI/CD • Performance • Framer Motion</div>
           </div>
         </div>
       </div>
-      <img src="./assets/arrow.png" alt="Arrow icon" class="icon arrow" onclick="location.href='./#projects'" />
     </section>
-    
-    
+
+    <!-- PROJECTS -->
     <section id="projects">
-      <p class="section__text__p1">Browse My Recent</p>
-      <h1 class="title">Projects</h1>
-      <div class="experience-details-container">
-        <div class="about-containers">
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/project1.png"
-                alt="Project 1"
-                class="project-img"
-              />
+      <div class="wrap">
+        <h2 class="title">Projects</h2>
+        <p class="subtitle">A few things I’ve built & shipped</p>
+        <div class="projects">
+          <article class="glass proj">
+            <div class="thumb"><img src="./assets/project1.png" alt="Swift-Shop-App" /></div>
+            <div class="pad">
+              <h4>Swift‑Shop‑App</h4>
+              <div class="actions">
+                <a class="btn ghost" href="https://github.com/Anatolii-developer/Swift-Shop-App" target="_blank" rel="noopener">GitHub</a>
+              </div>
             </div>
-            <h2 class="experience-sub-title project-title">Swift-Shop-App</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://github.com/Anatolii-developer/Swift-Shop-App'"
-              >
-                Github
-              </button>
+          </article>
+
+          <article class="glass proj">
+            <div class="thumb"><img src="./assets/inst.png" alt="IPS" /></div>
+            <div class="pad">
+              <h4>Psychological Institute Platform</h4>
+              <div class="actions">
+                <a class="btn ghost" href="http://157.230.121.24:5050" target="_blank" rel="noopener">Live Demo</a>
+              </div>
             </div>
-          </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/inst.png"
-                alt="Project 2"
-                class="project-img"
-              />
+          </article>
+
+          <article class="glass proj">
+            <div class="thumb"><img src="./assets/project3.png" alt="Wengy Landing" /></div>
+            <div class="pad">
+              <h4>Wengy Landing</h4>
+              <div class="actions">
+                <a class="btn ghost" href="https://wengy.co" target="_blank" rel="noopener">Live Demo</a>
+              </div>
             </div>
-            <h2 class="experience-sub-title project-title">Psychological Institute Platform</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='http://157.230.121.24:5050'"
-              >
-                Live Demo
-              </button>
+          </article>
+
+          <article class="glass proj">
+            <div class="thumb"><img src="./assets/vsl.png" alt="VSL Website" /></div>
+            <div class="pad">
+              <h4>VSL Website</h4>
+              <div class="actions">
+                <a class="btn ghost" href="https://intensive.wengy.co" target="_blank" rel="noopener">Live Demo</a>
+              </div>
             </div>
-          </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/project3.png"
-                alt="Project 3"
-                class="project-img"
-              />
+          </article>
+
+          <article class="glass proj">
+            <div class="thumb"><img src="./assets/ateam.png" alt="ATeam" /></div>
+            <div class="pad">
+              <h4>ATeam Marketing Website</h4>
+              <div class="actions">
+                <a class="btn ghost" href="https://ateamgroup.wengy.co" target="_blank" rel="noopener">Live Demo</a>
+              </div>
             </div>
-            <h2 class="experience-sub-title project-title">Wengy Landing</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://wengy.co'"
-              >
-                Live Demo
-              </button>
+          </article>
+
+          <article class="glass proj">
+            <div class="thumb"><img src="./assets/graphitti.png" alt="Graffiti Gone" /></div>
+            <div class="pad">
+              <h4>Graffiti Gone Website</h4>
+              <div class="actions">
+                <a class="btn ghost" href="https://graffiti-gone.wengy.co/" target="_blank" rel="noopener">Live Demo</a>
+              </div>
             </div>
-          </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/vsl.png"
-                alt="Project 3"
-                class="project-img"
-              />
+          </article>
+
+          <article class="glass proj">
+            <div class="thumb"><img src="./assets/wengy-mark.png" alt="Wengy Marketing" /></div>
+            <div class="pad">
+              <h4>Wengy Marketing Website</h4>
+              <div class="actions">
+                <a class="btn ghost" href="https://marketing.wengy.co/" target="_blank" rel="noopener">Live Demo</a>
+              </div>
             </div>
-            <h2 class="experience-sub-title project-title">VSL Website</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://intensive.wengy.co'"
-              >
-                Live Demo
-              </button>
+          </article>
+
+          <article class="glass proj">
+            <div class="thumb"><img src="./assets/beauty.png" alt="Beauty Salon" /></div>
+            <div class="pad">
+              <h4>Beauty Salon Website</h4>
+              <div class="actions">
+                <a class="btn ghost" href="https://lpbeatymedical.wengy.co/" target="_blank" rel="noopener">Live Demo</a>
+              </div>
             </div>
-          </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/ateam.png"
-                alt="Project 3"
-                class="project-img"
-              />
-            </div>
-            <h2 class="experience-sub-title project-title">ATeam Marketing Website</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://ateamgroup.wengy.co'"
-              >
-                Live Demo
-              </button>
-            </div>
-          </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/graphitti.png"
-                alt="Project 3"
-                class="project-img"
-              />
-            </div>
-            <h2 class="experience-sub-title project-title">Graffiti Gone Website</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://graffiti-gone.wengy.co/'"
-              >
-                Live Demo
-              </button>
-            </div>
-          </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/wengy-mark.png"
-                alt="Project 3"
-                class="project-img"
-              />
-            </div>
-            <h2 class="experience-sub-title project-title">Wengy Marketing Website</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://marketing.wengy.co/'"
-              >
-                Live Demo
-              </button>
-            </div>
-          </div>
-          <div class="details-container color-container">
-            <div class="article-container">
-              <img
-                src="./assets/beauty.png"
-                alt="Project 3"
-                class="project-img"
-              />
-            </div>
-            <h2 class="experience-sub-title project-title">Beauty Salon Website</h2>
-            <div class="btn-container">
-              <button
-                class="btn btn-color-2 project-btn"
-                onclick="location.href='https://lpbeatymedical.wengy.co/'"
-              >
-                Live Demo
-              </button>
-            </div>
-          </div>
+          </article>
         </div>
       </div>
-      <img
-        src="./assets/arrow.png"
-        alt="Arrow icon"
-        class="icon arrow"
-        onclick="location.href='./#contact'"
-      />
     </section>
+
+    <!-- CONTACT -->
     <section id="contact">
-      <p class="section__text__p1">Get in Touch</p>
-      <h1 class="title">Contact Me</h1>
-      <div class="contact-info-upper-container">
-        <div class="contact-info-container">
-          <img
-            src="./assets/email.png"
-            alt="Email icon"
-            class="icon contact-icon email-icon"
-          />
-          <p><a href="mailto:anatolii.hryhorzhevskyi@gmail.com">anatolii.hryhorzhevskyi@gmail.com</a></p>
-        </div>
-        <div class="contact-info-container">
-          <img
-            src="./assets/linkedin.png"
-            alt="LinkedIn icon"
-            class="icon contact-icon"
-          />
-          <p><a href="https://www.linkedin.com/in/anatolii-hryhorzhevskyi/">LinkedIn</a></p>
+      <div class="wrap">
+        <h2 class="title">Get in Touch</h2>
+        <div class="glass" style="padding:18px; margin-top:14px">
+          <div class="contact-row">
+            <a class="contact-item" href="mailto:anatolii.hryhorzhevskyi@gmail.com">
+              <img src="./assets/email.png" alt="email" width="22" height="22"/>
+              <span>anatolii.hryhorzhevskyi@gmail.com</span>
+            </a>
+            <a class="contact-item" href="https://www.linkedin.com/in/anatolii-hryhorzhevskyi/" target="_blank" rel="noopener">
+              <img src="./assets/linkedin.png" alt="linkedin" width="22" height="22"/>
+              <span>LinkedIn</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
+
     <footer>
-      <nav>
-        <div class="nav-links-container">
-          <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#experience">Experience</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div>
-      </nav>
-      <p>Copyright &#169; 2025 Anatolii Hryhorzhevskyi. All Rights Reserved.</p>
+      <div class="wrap">Copyright © 2025 Anatolii Hryhorzhevskyi. All rights reserved.</div>
     </footer>
-    <script src="script.js"></script>
+
     <script>
-  window.addEventListener("load", function () {
-    const loader = document.getElementById("loader");
-    loader.style.transition = "opacity 3s ease";
-    loader.style.opacity = "0";
-    setTimeout(() => {
-      loader.style.display = "none";
-    }, 600); 
-  });
-</script>
+      // HAMBURGER MENU
+      const $hamburger = document.querySelector('.hamburger');
+      const $menu = document.querySelector('.menu');
+      if($hamburger){
+        $hamburger.addEventListener('click', () => {
+          const open = $menu.style.display === 'block';
+          $menu.style.display = open ? 'none' : 'block';
+          $hamburger.setAttribute('aria-expanded', String(!open));
+          $menu.setAttribute('aria-hidden', String(open));
+        });
+        document.addEventListener('click', (e)=>{
+          if(!$menu.contains(e.target) && !$hamburger.contains(e.target)){
+            $menu.style.display = 'none';
+            $hamburger.setAttribute('aria-expanded','false');
+          }
+        });
+      }
 
+      
+      window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        loader.style.opacity = '0';
+        setTimeout(()=> loader.remove(), 600);
+      });
 
+      
+      const revealables = [];
+      const addReveal = (el)=>{ el.classList.add('reveal'); revealables.push(el) };
+      document.querySelectorAll('section .glass, .proj, .card, .avatar, .pill, .btn').forEach(addReveal);
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('show'); io.unobserve(e.target) } })
+      },{ threshold:.14 });
+      revealables.forEach(el=> io.observe(el));
+    </script>
   </body>
 </html>
